@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Funkcje JavaScript - Zadania</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; line-height: 1.6; }
+        section { border-bottom: 1px solid #ccc; padding: 10px 0; }
+        #wynik { font-weight: bold; color: blue; margin: 10px 0; }
+        .haslo-info { color: red; display: block; margin-top: 5px; }
+    </style>
+</head>
+<body>
+
+    <div id="wynik">Tutaj pojawi się wynik niektórych funkcji...</div>
+
+    <section>
+        <button onclick="SUMA()">Suma</button>
+        <button onclick="PODSTAWY()">Podstawy</button>
+        <button onclick="KALKULATOR()">Kalkulator</button>
+        <button onclick="MAKS()">Maks</button>
+        <button onclick="WZROST()">Wzrost</button>
+        <button onclick="BMI()">BMI</button>
+    </section>
+
+    <section>
+        Data 1: <input type="date" id="data1">
+        Data 2: <input type="date" id="data2">
+        <button onclick="STARSZY()">Kto starszy?</button>
+    </section>
+
+    <section>
+        Rok: <input type="number" id="rokInput">
+        <button onclick="PRZESTEPNY(document.getElementById('rokInput').value)">Czy przestępny?</button>
+    </section>
+
+    <section>
+        Hasło: <input type="text" id="hasloInput" oninput="SILA()">
+        <span id="silaWynik" class="haslo-info"></span>
+    </section>
+
+    <section>
+        <button onclick="TROJKAT()">Czy trójkąt?</button>
+    </section>
+
+    <section>
+        Szyfr: <input type="text" id="szyfrInput" onkeyup="SZYFR()">
+        <span id="szyfrWynik" style="margin-left: 20px; font-family: monospace;"></span>
+    </section>
+
+    <script>
+        function SUMA() {
+            let a = parseInt(prompt("Podaj pierwszą liczbę całkowitą:"));
+            let b = parseInt(prompt("Podaj drugą liczbę całkowitą:"));
+            alert("Suma: " + (a + b));
+        }
+
+        function PODSTAWY() {
+            let a = parseFloat(prompt("Podaj pierwszą liczbę:"));
+            let b = parseFloat(prompt("Podaj drugą liczbę:"));
+            let r = a - b;
+            let m = a * b;
+            let d = b !== 0 ? (a / b) : "Błąd (dzielenie przez 0)";
+            alert("Różnica: " + r + "\nIloczyn: " + m + "\nIloraz: " + d);
+        }
+
+        function KALKULATOR() {
+            let a = parseFloat(prompt("Podaj pierwszą liczbę:"));
+            let b = parseFloat(prompt("Podaj drugą liczbę:"));
+            let op = prompt("Wybierz działanie (+, -, *, /):");
+            let w = 0;
+            switch(op) {
+                case '+': w = a + b; break;
+                case '-': w = a - b; break;
+                case '*': w = a * b; break;
+                case '/': w = b !== 0 ? (a / b) : "Dzielenie przez 0!"; break;
+                default: w = "Nieznane działanie";
+            }
+            document.getElementById('wynik').innerText = "Kalkulator: " + w;
+        }
+
+        function MAKS() {
+            let a = parseFloat(prompt("Liczba 1:"));
+            let b = parseFloat(prompt("Liczba 2:"));
+            let c = parseFloat(prompt("Liczba 3:"));
+            let m = Math.max(a, b, c);
+            alert("Największa liczba to: " + m);
+        }
+
+        function WZROST() {
+            let w = parseFloat(prompt("Podaj wzrost w cm:"));
+            let k = "";
+            if (w < 150) k = "niski";
+            else if (w > 180) k = "wysoki";
+            else k = "średni";
+            alert("Twój wzrost jest: " + k);
+        }
+
+        function BMI() {
+            let cm = parseFloat(prompt("Wzrost (cm):"));
+            let kg = parseFloat(prompt("Waga (kg):"));
+            let bmi = kg / ((cm/100) * (cm/100));
+            let kom = "";
+            if (bmi < 18.5) kom = "za mało!";
+            else if (bmi > 25) kom = "za dużo!";
+            else kom = "OK!";
+            document.getElementById('wynik').innerText = "BMI: " + bmi.toFixed(2) + " - " + kom;
+        }
+
+        function STARSZY() {
+            let d1 = new Date(document.getElementById('data1').value);
+            let d2 = new Date(document.getElementById('data2').value);
+            if (d1 < d2) alert("Pierwsza osoba jest starsza");
+            else if (d1 > d2) alert("Druga osoba jest starsza");
+            else alert("Są w tym samym wieku");
+        }
+
+        function PRZESTEPNY(rok) {
+            let r = parseInt(rok);
+            let p = (r % 4 === 0 && r % 100 !== 0) || (r % 400 === 0);
+            console.log(p ? "Rok " + r + " jest przestępny" : "Rok " + r + " nie jest przestępny");
+        }
+
+        function SILA() {
+            let h = document.getElementById('hasloInput').value;
+            let s = "mocne";
+            let r_duza = /[A-Z]/;
+            let r_mala = /[a-z]/;
+            let r_cyfra = /[0-9]/;
+            let r_spec = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
+
+            if (h.length < 8) s = "średnie";
+            if (h.length < 4) s = "słabe";
+            if (!r_duza.test(h) || !r_mala.test(h) || !r_cyfra.test(h) || !r_spec.test(h)) s = "słabe";
+            
+            document.getElementById('silaWynik').innerText = "Siła: " + s;
+        }
+
+        function TROJKAT() {
+            let a = parseInt(prompt("Bok a:"));
+            let b = parseInt(prompt("Bok b:"));
+            let c = parseInt(prompt("Bok c:"));
+            let mozliwy = (a + b > c) && (a + c > b) && (b + c > a);
+            console.log(mozliwy ? "Można zbudować trójkąt" : "Nie można zbudować trójkąta");
+        }
+
+        function SZYFR() {
+            let inStr = document.getElementById('szyfrInput').value;
+            let outStr = "";
+            for (let i = 0; i < inStr.length; i++) {
+                let code = inStr.charCodeAt(i);
+                if (code >= 97 && code <= 122) {
+                    outStr += String.fromCharCode(((code - 97 + 2) % 26) + 97);
+                } else if (code >= 65 && code <= 90) {
+                    outStr += String.fromCharCode(((code - 65 + 2) % 26) + 65);
+                } else {
+                    outStr += inStr[i];
+                }
+            }
+            document.getElementById('szyfrWynik').innerText = outStr;
+        }
+    </script>
+</body>
+</html>
